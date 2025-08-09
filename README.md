@@ -1,5 +1,3 @@
-even more.
-vscode work space.
 # env-gen
 
 env-gen is a cross-platform environment generator for C/C++ and GNU autoconf-based projects, designed to help both beginners and advanced users set up and manage their development environments in VS Code.

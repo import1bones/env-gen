@@ -16,7 +16,6 @@ def check_tool(tool):
     return shutil.which(tool) is not None
 
 
-
 def check_all():
     """Check all required tools and return a dict of results."""
     results = {}

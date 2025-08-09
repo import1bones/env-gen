@@ -4,6 +4,7 @@ Platform detection and abstraction for envgen.
 
 import sys
 
+
 def get_platform():
     
     """Return a string representing the current platform."""

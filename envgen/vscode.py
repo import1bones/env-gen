@@ -1,14 +1,16 @@
 """
 VS Code configuration file generation for envgen.
 """
-def generate_vscode_configs(target_dir):
 import os
 import shutil
 
-TEMPLATES_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'templates'))
+TEMPLATES_DIR = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '..', 'templates')
+)
+
 
 def generate_vscode_configs(target_dir):
-    """Copy template VS Code config files to the target directory's .vscode folder."""
+    """Copy template VS Code config files to target .vscode folder."""
     vscode_dir = os.path.join(target_dir, '.vscode')
     os.makedirs(vscode_dir, exist_ok=True)
     for fname in ['tasks.json', 'launch.json']:
