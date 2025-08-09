@@ -1,8 +1,6 @@
 """
 Main CLI entrypoint for envgen.
 """
-def main():
-
 import argparse
 import os
 from rich.console import Console
@@ -10,6 +8,7 @@ from rich.table import Table
 from rich.panel import Panel
 from . import checks
 from . import vscode
+
 
 def main():
     parser = argparse.ArgumentParser(

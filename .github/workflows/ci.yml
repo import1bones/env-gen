@@ -28,29 +28,20 @@ jobs:
 
       - name: Simulate beginner environment (no build tools)
         run: |
-          if [ "${{ runner.os }}" = "Linux" ]; then sudo apt-get remove -y gcc g++ make || true; fi
-          if [ "${{ runner.os }}" = "Windows" ]; then choco uninstall -y mingw || true; fi
+          if [ "$RUNNER_OS" = "Linux" ]; then sudo apt-get remove -y gcc g++ make || true; fi
+          if [ "$RUNNER_OS" = "Windows" ]; then choco uninstall -y mingw || true; fi
+          export PYTHONPATH=$PWD:$PYTHONPATH
           python -m envgen.cli --check --generate --target test-beginner
         shell: bash
 
       - name: Check VS Code config generated
         run: |
-          if [ "${{ runner.os }}" = "Windows" ]; then \
-            if not exist test-beginner\.vscode\tasks.json exit 1; \
-            if not exist test-beginner\.vscode\launch.json exit 1; \
-          else \
-            test -f test-beginner/.vscode/tasks.json; \
-            test -f test-beginner/.vscode/launch.json; \
-          fi
+          test -f test-beginner/.vscode/tasks.json
+          test -f test-beginner/.vscode/launch.json
         shell: bash
 
       - name: Show generated config
         run: |
-          if [ "${{ runner.os }}" = "Windows" ]; then \
-            type test-beginner\.vscode\tasks.json; \
-            type test-beginner\.vscode\launch.json; \
-          else \
-            cat test-beginner/.vscode/tasks.json; \
-            cat test-beginner/.vscode/launch.json; \
-          fi
+          cat test-beginner/.vscode/tasks.json
+          cat test-beginner/.vscode/launch.json
         shell: bash
