@@ -18,6 +18,11 @@ env-gen is a cross-platform environment generator for C/C++ and GNU autoconf-bas
 2. Use the provided Python scripts to check your environment and generate VS Code workspace files.
 3. Follow the interactive prompts to select the environment or template you want.
 
+
+## 🚀 Quick Start for Beginners
+
+👉 **See the [Beginner Quick Start Example](docs/quickstart-beginner.md) for the fastest way to set up your C/C++ environment in VS Code!**
+
 ## Documentation
 
 See the [docs/](docs/README.md) folder for detailed documentation, including:
