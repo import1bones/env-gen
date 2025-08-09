@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  envgen-beginner:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Simulate beginner environment (no build tools)
+        run: |
+          if [ "${{ runner.os }}" = "Linux" ]; then sudo apt-get remove -y gcc g++ make || true; fi
+          if [ "${{ runner.os }}" = "Windows" ]; then choco uninstall -y mingw || true; fi
+          python -m envgen.cli --check --generate --target test-beginner
+        shell: bash
+
+      - name: Check VS Code config generated
+        run: |
+          if [ "${{ runner.os }}" = "Windows" ]; then \
+            if not exist test-beginner\.vscode\tasks.json exit 1; \
+            if not exist test-beginner\.vscode\launch.json exit 1; \
+          else \
+            test -f test-beginner/.vscode/tasks.json; \
+            test -f test-beginner/.vscode/launch.json; \
+          fi
+        shell: bash
+
+      - name: Show generated config
+        run: |
+          if [ "${{ runner.os }}" = "Windows" ]; then \
+            type test-beginner\.vscode\tasks.json; \
+            type test-beginner\.vscode\launch.json; \
+          else \
+            cat test-beginner/.vscode/tasks.json; \
+            cat test-beginner/.vscode/launch.json; \
+          fi
+        shell: bash
