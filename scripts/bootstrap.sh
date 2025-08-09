@@ -17,5 +17,8 @@ if ! command -v python3 >/dev/null 2>&1; then
     fi
 fi
 
+# Install Python dependencies
+python3 -m pip install --user -r "$(dirname "$0")/../requirements.txt"
+
 # Run the main Python CLI
 exec python3 -m envgen.cli "$@"

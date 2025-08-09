@@ -1,10 +1,11 @@
 """
 Platform detection and abstraction for envgen.
 """
+
 import sys
-import platform
 
 def get_platform():
+    
     """Return a string representing the current platform."""
     plt = sys.platform
     if plt.startswith('linux'):
@@ -16,6 +17,7 @@ def get_platform():
     else:
         return 'unknown'
 
+    
 def is_supported():
     """Return True if the platform is supported."""
     return get_platform() in ('linux', 'macos', 'windows')

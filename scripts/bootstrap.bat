@@ -14,5 +14,8 @@ if %errorlevel% neq 0 (
     )
 )
 
+REM Install Python dependencies
+python -m pip install --user -r "%~dp0..\requirements.txt"
+
 REM Run the main Python CLI
 python -m envgen.cli %*

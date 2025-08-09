@@ -10,9 +10,11 @@ REQUIRED_TOOLS = [
     'python3',
 ]
 
+
 def check_tool(tool):
     """Return True if the tool is found in PATH."""
     return shutil.which(tool) is not None
+
 
 
 def check_all():

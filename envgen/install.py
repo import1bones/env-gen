@@ -1,11 +1,12 @@
 """
 Tool installation logic for envgen.
 """
+
 import subprocess
-import sys
 from .platform import get_platform
 
 def install_tool(tool):
+    
     """Attempt to install the given tool using the system package manager."""
     platform = get_platform()
     if platform == 'macos':
@@ -13,6 +14,13 @@ def install_tool(tool):
     elif platform == 'linux':
         subprocess.run(['sudo', 'apt-get', 'install', '-y', tool], check=False)
     elif platform == 'windows':
-        subprocess.run(['choco', 'install', tool, '-y'], check=False)
+        # Prefer winget if available, fallback to choco
+        from shutil import which
+        if which('winget'):
+            subprocess.run(['winget', 'install', '--id', tool, '-e', '--silent'], check=False)
+        elif which('choco'):
+            subprocess.run(['choco', 'install', tool, '-y'], check=False)
+        else:
+            print(f"[envgen] Neither winget nor choco found. Please install {tool} manually.")
     else:
         print(f"[envgen] Unsupported platform for installing {tool}.")
