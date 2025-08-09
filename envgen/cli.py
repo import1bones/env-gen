@@ -26,6 +26,10 @@ def main():
         '--target', type=str, default=os.getcwd(),
         help='Target directory for config generation'
     )
+    parser.add_argument(
+        '--non-interactive', action='store_true',
+        help='Run in non-interactive mode (skip tool installation prompts)'
+    )
     args = parser.parse_args()
 
     console = Console()
@@ -57,15 +61,21 @@ def main():
                 f"[yellow]Missing tools: {missing_str}[/yellow]",
                 title="envgen"
             ))
-            from rich.prompt import Confirm
-            from .install import install_tool
-            for tool in missing_tools:
-                prompt = f"Install [bold]{tool}[/bold]?"
-                if Confirm.ask(prompt, default=True):
-                    install_tool(tool)
-                else:
-                    msg = f"[yellow]Skipped installation of {tool}.[/yellow]"
-                    console.print(msg)
+            if not args.non_interactive:
+                from rich.prompt import Confirm
+                from .install import install_tool
+                for tool in missing_tools:
+                    prompt = f"Install [bold]{tool}[/bold]?"
+                    if Confirm.ask(prompt, default=True):
+                        install_tool(tool)
+                    else:
+                        msg = (f"[yellow]Skipped installation of "
+                               f"{tool}.[/yellow]")
+                        console.print(msg)
+            else:
+                msg = ("[yellow]Non-interactive mode: skipping tool "
+                       "installation.[/yellow]")
+                console.print(msg)
     if args.generate:
         gen_msg = (f"[bold green]Generating VS Code configuration "
                    f"in {args.target}...[/bold green]")

@@ -26,15 +26,27 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Simulate beginner environment (no build tools)
+      - name: Test with all tools present
+        run: |
+          export PYTHONPATH=$PWD:$PYTHONPATH
+          python -m envgen.cli --check --generate --target test-complete --non-interactive
+        shell: bash
+
+      - name: Simulate beginner environment (remove build tools)
         run: |
           if [ "$RUNNER_OS" = "Linux" ]; then sudo apt-get remove -y gcc g++ make || true; fi
           if [ "$RUNNER_OS" = "Windows" ]; then choco uninstall -y mingw || true; fi
           export PYTHONPATH=$PWD:$PYTHONPATH
-          python -m envgen.cli --check --generate --target test-beginner
+          python -m envgen.cli --check --generate --target test-beginner --non-interactive
         shell: bash
 
-      - name: Check VS Code config generated
+      - name: Check VS Code config generated (complete environment)
+        run: |
+          test -f test-complete/.vscode/tasks.json
+          test -f test-complete/.vscode/launch.json
+        shell: bash
+
+      - name: Check VS Code config generated (beginner environment)
         run: |
           test -f test-beginner/.vscode/tasks.json
           test -f test-beginner/.vscode/launch.json
@@ -42,6 +54,8 @@ jobs:
 
       - name: Show generated config
         run: |
+          echo "=== Complete environment config ==="
+          cat test-complete/.vscode/tasks.json
+          echo "=== Beginner environment config ==="
           cat test-beginner/.vscode/tasks.json
-          cat test-beginner/.vscode/launch.json
         shell: bash
